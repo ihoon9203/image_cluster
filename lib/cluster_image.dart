@@ -4,11 +4,36 @@ import 'image_cluster_controller.dart';
 class ClusterImage extends StatefulWidget {
   final ImageProvider image;
   final ImageClusterController controller;
+  final Widget? marker;
+  final Widget? clusterMarker;
+  final Function? onMarkerTapped;
+  final double? minClusterDiameter;
+  final Color? markerColor;
+  final Color? clusterColor;
+  final Color? clusterMarkerColor;
+  final Color? clusterBorderColor;
+  final Color? markerTextColor;
+  final Color? clusterTextColor;
+  final String markerText;
+  final bool clusterSizeShouldIncrement;
+
 
   const ClusterImage({
     super.key,
     required this.image,
     required this.controller,
+    this.marker,
+    this.clusterMarker,
+    this.onMarkerTapped,
+    this.minClusterDiameter,
+    this.markerColor,
+    this.clusterColor,
+    this.clusterMarkerColor,
+    this.clusterBorderColor,
+    this.markerTextColor,
+    this.clusterTextColor,
+    this.markerText = '',
+    this.clusterSizeShouldIncrement = false,
   });
 
   @override
@@ -34,7 +59,7 @@ class _ClusterImageState extends State<ClusterImage> {
 
   void _addMarker(Offset offset) {
     setState(() {
-      widget.controller.markers.add(offset);
+      widget.controller.addMarker(offset);
     });
   }
 

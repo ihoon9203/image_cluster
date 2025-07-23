@@ -6,7 +6,7 @@ import 'cluster.dart';
 
 class ImageClusterController {
   final TransformationController transformationController = TransformationController();
-  final List<Offset> markers = [];
+  final List<Offset> _markers = [];
   static const double clusterDistance = 40;
 
   Timer? _throttleTimer;
@@ -16,6 +16,10 @@ class ImageClusterController {
   void dispose() {
     transformationController.dispose();
     _throttleTimer?.cancel();
+  }
+
+  void addMarker(Offset marker) {
+    _markers.add(marker);
   }
 
   void handleTransformChange() {
@@ -34,7 +38,7 @@ class ImageClusterController {
     final Matrix4 matrix = transformationController.value;
 
     // 마커 터치 확인
-    for (final marker in markers) {
+    for (final marker in _markers) {
       final transformed = matrix.transform3(Vector3(marker.dx, marker.dy, 0));
       final markerScreenOffset = Offset(transformed.x, transformed.y);
 
@@ -55,7 +59,7 @@ class ImageClusterController {
     final double currentScale = transformationController.value.getMaxScaleOnAxis();
     final double scaledDistance = clusterDistance / currentScale;
 
-    for (final marker in markers) {
+    for (final marker in _markers) {
       bool added = false;
       for (final cluster in clusters) {
         if ((cluster.center - marker).distance < scaledDistance) {
